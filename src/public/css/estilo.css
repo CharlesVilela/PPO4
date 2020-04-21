@@ -1,0 +1,14 @@
+.botaoEnviar{
+    width: 100px;
+    height: 40px;
+
+}
+
+.botaoCancelar{
+    width: 100px;
+    height: 40px;
+
+    margin-left: 200px;
+    margin-top: -40px;
+    
+}
