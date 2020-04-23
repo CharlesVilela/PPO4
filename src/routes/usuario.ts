@@ -1,12 +1,13 @@
 import { Router, Request, Response } from 'express';
 
-import { AlertComponent, AlertModule } from 'ngx-bootstrap/alert';
+// IMPORTS DE MODEL
+import usuario from '../model/Usuario';
+import Usuario from '../model/Usuario';
 
 
 const router = Router();
 
-// IMPORTS DE MODEL
-import usuario from '../model/Usuario';
+
 
 router.route('/create')
     .get((req: Request, res: Response) => {
@@ -25,10 +26,16 @@ router.route('/create')
             (error: any) => alert('erro');
         }
         else {
-           res.send('Senhas não se correspondem!');
+            res.send('Senhas não se correspondem!');
         }
+    })
 
 
+    router.route('/list')
+    .get(async (req: Request, res: Response) => {
+        const listar = await Usuario.find();
+        console.log(listar);
+        res.render('usuario/list', {listar});
     })
 
 export default router;

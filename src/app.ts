@@ -46,6 +46,7 @@ class Application {
         this.app.use('/usuario', usuarioRoutes);
 
         this.app.use(express.static(path.join(__dirname, 'public')));
+    
     }
 
     start(){
