@@ -1,9 +1,26 @@
-{{#each listar}}
-<h3>{{nomeUsuario}}</h3>
-<h3>{{email}}</h3>
-<h3>{{senha}}</h3>
-{{/each}}
 
+<div class="row">
+    {{#each listar}}
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <p>{{nomeUsuario}}</p>
+                <p>{{email}}</p>
+                <p>{{senha}}</p>
+            </div>
+            <div class="card-footer d-flx justify-content-between align-items-center">
+                <a href="/usuario/delete/{{_id}}" class="btn btn-danger">
+                    Delete
+                </a>
+                <a href="" class="btn btn-secondary">
+                    Edit
+                </a>
+                
+            </div>
+        </div>
+    </div>
 
+    {{else}}
 
-<h1>Testing</h1>
+    {{/each}}
+</div>

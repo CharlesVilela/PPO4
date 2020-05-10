@@ -5,3 +5,4 @@ import database from './database';
 database();
 const app = new App();
 app.start();
+
