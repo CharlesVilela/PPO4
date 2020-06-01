@@ -8,9 +8,8 @@ import { allowInsecurePrototypeAccess } from '@handlebars/allow-prototype-access
 //Routes
 import indexRoutes from './routes';
 import usuarioRoutes from './routes/usuario';
-
-
-
+import loginRoutes from './routes/login';
+import recuperarSenhaRoutes from './routes/recuperarSenha';
 
 class Application {
 
@@ -22,10 +21,7 @@ class Application {
         this.settings();
         this.middlewares();
         this.routes();
-
-
     }
-
 
     settings() {
         this.app.set('port', 3000);
@@ -52,7 +48,9 @@ class Application {
     routes() {
         this.app.use(indexRoutes);
         this.app.use('/usuario', usuarioRoutes);
-
+        this.app.use('/login', loginRoutes);
+        this.app.use('/recuperarSenha', recuperarSenhaRoutes);
+        
         this.app.use(express.static(path.join(__dirname, 'public')));
     }
 

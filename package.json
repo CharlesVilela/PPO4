@@ -23,12 +23,15 @@
   },
   "dependencies": {
     "@handlebars/allow-prototype-access": "^1.0.3",
+    "@types/nodemailer": "^6.4.0",
     "bootstrap": "^4.4.1",
     "express": "^4.17.1",
     "express-handlebars": "^4.0.3",
     "mongoose": "^5.9.10",
     "morgan": "^1.10.0",
     "ngx-bootstrap": "^5.6.1",
+    "nodemailer": "^6.4.6",
+    "nodemailer-express-handlebars": "^4.0.0",
     "rimraf": "^3.0.2"
   }
 }

@@ -1,4 +1,14 @@
 
+<a href="/usuario/create" class="btn btn-primary">
+    Create
+</a>
+
+<a href="/login/logar" class="btn btn-primary">
+    login
+</a>
+
+
+
 <div class="row">
     {{#each listar}}
     <div class="col-md-3">
@@ -12,7 +22,7 @@
                 <a href="/usuario/delete/{{_id}}" class="btn btn-danger">
                     Delete
                 </a>
-                <a href="" class="btn btn-secondary">
+                <a href="/usuario/update/{{_id}}" class="btn btn-secondary">
                     Edit
                 </a>
                 

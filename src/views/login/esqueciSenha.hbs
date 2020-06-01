@@ -1,0 +1,32 @@
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="form-group">
+                    <p>No campo abaixo adicione seu E-mail para que sejá enviado para você uma senha temporaria, 
+                        a utilize para logar e logo em seguida atualize sua senha</p>
+                </div>
+
+                <form action="/recuperarSenha/esqueci_senha" method="POST">
+                    <div class="form-group">
+                        <input type="email"  class="form-control" name="email" placeholder="E-mail">
+                    </div>
+
+                    <div class="botaoEnviar">
+                        <button type="submit" class="btn btn-success btn-block">
+                            Enviar
+                         </button>
+                    </div>
+
+                    <div class="botaoCancelar">
+                        <button type="" class="btn btn-success btn-block">
+                            Cancelar
+                         </button>
+                    </div>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

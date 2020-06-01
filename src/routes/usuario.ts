@@ -1,14 +1,11 @@
 import { Router, Request, Response } from 'express';
 
 // IMPORTS DE MODEL
-import usuario from '../model/Usuario';
 import Usuario from '../model/Usuario';
 
 
 
 const router = Router();
-
-
 
 router.route('/create')
     .get((req: Request, res: Response) => {
@@ -37,8 +34,8 @@ router.route('/create')
             res.render('usuario/create', { erros: erros });
         } else {
 
-            const { nomeUsuario, email, senha, confirmarSenha } = req.body;
-            const newUsuario = new usuario({ nomeUsuario, email, senha });
+            const { nomeUsuario, email, senha } = req.body;
+            const newUsuario = new Usuario({ nomeUsuario, email, senha });
             await newUsuario.save();
             res.redirect('../usuario/list');
         }
@@ -52,6 +49,22 @@ router.route('/list')
             console.log(listar);
             res.render('usuario/list', { listar: listar });
         });
+    });
+
+router.route('/update/:id')
+    .get(async(req: Request, res: Response) => {
+       
+        const { id } = req.params;
+        const usuario = await Usuario.findById(id);
+
+        res.render('usuario/update', { usuario })
+    })
+    .post(async (req: Request, res: Response) => {
+        
+        const { id } = req.params;
+        const {nomeUsuario, email, senha} = req.body;
+        await Usuario.findByIdAndUpdate(id, {nomeUsuario, email, senha});
+        res.redirect('../list');
     });
 
 router.route('/delete/:id')

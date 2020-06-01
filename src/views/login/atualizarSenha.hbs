@@ -1,0 +1,36 @@
+{{#each erros}}
+    <div class="alert alert-danger">{{texto}}</div>
+{{else}}
+
+{{/each}}
+
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <div class="card">
+            <div class="card-body">
+                <form action="/recuperarSenha/atualizarSenha/{{logof._id}}" method="POST">
+                    <div class="form-group">
+                        <input type="password"  class="form-control"  name="senha" placeholder="Nova senha">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text"  class="form-control" name="confirmarNovaSenha" placeholder="Confirmar nova senha">
+                    </div>
+
+                    <div class="botaoEnviar">
+                        <button type="submit" class="btn btn-success btn-block">
+                            Enviar
+                         </button>
+                    </div>
+
+                    <div class="botaoCancelar">
+                        <button type="" class="btn btn-success btn-block">
+                            Cancelar
+                         </button>
+                    </div>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
