@@ -23,14 +23,6 @@ import { Schema, model } from 'mongoose';
         minlength: [8, 'A senha não pode ter menos que 8 caracteres'],
         maxlength: [16, 'A senha não pode ter mais que 16 caracteres'],
        
-    },
-    senhaResetToken: {
-        type: String,
-        required: false
-    },
-    senhaTempoExpiracao: {
-        type: Date,
-        required: false
     }
 
     });
