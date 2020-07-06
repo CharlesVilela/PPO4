@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const URI = 'mongodb+srv://ppo:123@cluster0-vg64c.mongodb.net/test?retryWrites=true&w=majority';
+const URI = 'mongodb+srv://ppo:123@cluster0-vnfur.mongodb.net/ppo?retryWrites=true&w=majority';
 
 async function connect (){
 

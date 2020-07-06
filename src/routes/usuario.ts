@@ -11,7 +11,6 @@ router.route('/create')
     .get((req: Request, res: Response) => {
         res.render('usuario/create')
     })
-
     .post(async (req: Request, res: Response) => {
 
         var erros = []
@@ -52,26 +51,26 @@ router.route('/list')
     });
 
 router.route('/update/:id')
-    .get(async(req: Request, res: Response) => {
-       
+    .get(async (req: Request, res: Response) => {
+
         const { id } = req.params;
         const usuario = await Usuario.findById(id);
 
         res.render('usuario/update', { usuario })
     })
     .post(async (req: Request, res: Response) => {
-        
+
         const { id } = req.params;
-        const {nomeUsuario, email, senha} = req.body;
-        await Usuario.findByIdAndUpdate(id, {nomeUsuario, email, senha});
+        const { nomeUsuario, email, senha } = req.body;
+        await Usuario.findByIdAndUpdate(id, { nomeUsuario, email, senha });
         res.redirect('../list');
     });
 
 router.route('/delete/:id')
     .get(async (req: Request, res: Response) => {
-       const { id } = req.params;
-       await Usuario.findByIdAndDelete(id);
-       res.redirect('../list');
+        const { id } = req.params;
+        await Usuario.findByIdAndDelete(id);
+        res.redirect('../list');
     });
 
 

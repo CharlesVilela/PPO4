@@ -1,5 +1,10 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 
+interface usuarioInterface extends Document {
+   nomeUsuario: String
+   email: String
+   senha: String
+}
 
  const usuarioSchema = new Schema({ 
 
@@ -24,8 +29,7 @@ import { Schema, model } from 'mongoose';
         maxlength: [16, 'A senha não pode ter mais que 16 caracteres'],
        
     }
-
     });
 
-export default model('Usuario', usuarioSchema);
+export default model<usuarioInterface>('Usuario', usuarioSchema);
 
