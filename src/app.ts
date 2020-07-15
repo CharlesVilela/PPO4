@@ -12,6 +12,7 @@ import loginRoutes from './routes/login';
 import recuperarSenhaRoutes from './routes/recuperarSenha';
 import brokerRoutes from './routes/broker';
 import connectBrokerRoutes from './routes/conectBroker';
+import topicoRoutes from './routes/topico';
 
 class Application {
 
@@ -52,8 +53,9 @@ class Application {
         this.app.use('/usuario', usuarioRoutes);
         this.app.use('/login', loginRoutes);
         this.app.use('/recuperarSenha', recuperarSenhaRoutes);
-        this.app.use('/broker', brokerRoutes);connectBrokerRoutes
+        this.app.use('/broker', brokerRoutes);
         this.app.use('/conectar', connectBrokerRoutes);
+        this.app.use('/topico', topicoRoutes);
         
         this.app.use(express.static(path.join(__dirname, 'public')));
     }

@@ -1,0 +1,69 @@
+<h1>
+    Pagina Principal
+</h1>
+
+<h3>Bem vindo </h3>
+{{#each logof}}
+
+    <h3>{{nomeUsuario}}</h3>
+    <h3>{{id}}</h3>
+    
+{{/each}}
+
+<a href="/usuario/list" class="btn btn-primary">
+    Listar
+</a>
+
+<a href="/broker/create/{{logof._id}}" class="btn btn-primary">
+    Cadastrar Broker
+</a>
+
+ <a href="/usuario/update/{{logof._id}}" class="btn btn-secondary">
+                    Edit
+</a>
+
+<a href="/broker/list/{{logof._id}}" class="btn btn-primary">
+    Listar Broker
+</a>
+
+<a href="/topico/create/{{logof._id}}" class="btn btn-primary">
+    Cadastrar Topico
+</a>
+
+<a href="/topico/list/{{logof._id}}" class="btn btn-primary">
+    Listar Topico
+</a>
+
+
+<div class="row">
+    {{#each listar}}
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <p>TOPICO: {{nome}}</p>
+                <p>MENSAGEM: {{mensagem}}</p>
+                <p>USUARIO: {{usuario}}</p>
+            </div>
+            <div class="card-footer d-flx justify-content-between align-items-center">
+                <a href="/topico/delete/{{_id}}" class="btn btn-danger">
+                    Delete
+                </a>
+                <a href="/topico/update/{{_id}}" class="btn btn-secondary">
+                    Edit
+                </a>
+                 <a href="/topico/subscribe/{{_id}}" class="btn btn-secondary">
+                    Adicionar broker
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+    {{else}}
+
+    {{/each}}
+</div>
+
+
+
+

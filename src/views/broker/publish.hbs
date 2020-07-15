@@ -1,0 +1,58 @@
+{{#each erros}}
+<div class="alert alert-danger">{{texto}}</div>
+{{else}}
+
+{{/each}}
+
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <div class="card">
+            <div class="card-body">
+                <form action="/conectar/publish/{{usuario._id}}" method="POST">
+                    <div class="form-group">
+                        <input type="text" name="mensagem" placeholder="Mensagem" class="form-control" autofocus>
+                    </div>
+                    <div class="botaoEnviar">
+                        <button type="submit" class="btn btn-success btn-block">
+                            Publicar
+                        </button>
+                    </div>
+
+                    <div class="botaoCancelar">
+                        <button type="" class="btn btn-danger btn-block">
+                            Cancelar
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    {{#each mensagem}}
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <p>Mensagem: {{mensagem}}</p>   
+            </div>
+            <div class="card-footer d-flx justify-content-between align-items-center">
+                <a href="/broker/delete/{{_id}}" class="btn btn-danger">
+                    Delete
+                </a>
+                <a href="/broker/update/{{_id}}" class="btn btn-secondary">
+                    Edit
+                </a>
+                <a href="/conectar/connect/{{_id}}" class="btn btn-secondary">
+                    connect
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {{else}}
+
+    {{/each}}
+</div>

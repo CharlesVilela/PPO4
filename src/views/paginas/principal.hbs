@@ -22,44 +22,17 @@
                     Edit
 </a>
 
-<a href="/broker/list" class="btn btn-primary">
+<a href="/broker/list/{{logof._id}}" class="btn btn-primary">
     Listar Broker
 </a>
 
-<a href="/broker/conectBroker" class="btn btn-primary">
-    Conectar Broker
+<a href="/topico/create/{{logof._id}}" class="btn btn-primary">
+    Cadastrar Topico
 </a>
 
-<div class="row">
-    {{#each listar}}
-    <div class="col-md-3">
-        <div class="card">
-            <div class="card-body">
-                <p>IP: {{numeroIp}}</p>
-                <p>PORTA: {{porta}}</p>
-                <p>CLEAR: {{clear}}</p>
-                <p>PAYLOAD: {{payload}}</p>
-                <p>QOS: {{qos}}</p>
-                <p>USUARIO: {{usuario}}</p>
-            </div>
-            <div class="card-footer d-flx justify-content-between align-items-center">
-                <a href="/broker/delete/{{_id}}" class="btn btn-danger">
-                    Delete
-                </a>
-                <a href="/broker/update/{{_id}}" class="btn btn-secondary">
-                    Edit
-                </a>
-                <a href="/conectar/connect" class="btn btn-secondary">
-                    connect
-                </a>
-            </div>
-        </div>
-    </div>
-
-    {{else}}
-
-    {{/each}}
-</div>
+<a href="/topico/list/{{logof._id}}" class="btn btn-primary">
+    Listar Topico
+</a>
 
 
 

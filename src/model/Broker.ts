@@ -1,14 +1,16 @@
 import { Schema, model, Document } from 'mongoose';
 import mongoose from '../database';
 import Usuario from '../model/Usuario';
+import { QoS } from 'mqtt';
 
 interface brokerInterface extends Document {
-    numeroIp: string
-    porta: number
-    clean: boolean
-    payload: string
-    qos: Number
-    usuario: string
+    numeroIp: string;
+    porta: number;
+    clean: boolean;
+    payload: string;
+    qos: QoS;
+    retain: boolean;
+    usuario: string;
 
 }
 
@@ -38,7 +40,12 @@ const brokerSchema = new Schema({
        type: Number,
        required: true,
        lowercase: true,
-       default: 0 
+       default: 1 
+    },
+    retain:{
+        type: Boolean,
+        required: true,
+        default: false
     },
     usuario:{
         type: String,

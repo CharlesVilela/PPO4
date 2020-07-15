@@ -8,46 +8,53 @@ import conectBroker from '../routes/conectBroker';
 const router = Router();
 
 router.route('/create/:id')
-.get(async(req: Request, res: Response) => {
-    
-    const { id } = req.params;
-    const usuario = await Usuario.findById(id);
-
-    res.render('broker/create', { usuario })
-
-
-})
-.post(async(req: Request, res: Response) => {
-
-    try {
-
-        const { numeroIp, porta, clear, payload, qos, usuario } = req.body;
-        const newBroker = new Broker({ numeroIp, porta, clear, payload, qos, usuario });
-        await newBroker.save();
-
-        return res.status(200).send('Creating Sucess!');
-        
-
-    } catch (error) {
-        return res.status(400).send({error: 'Error creating new Broker'});
-    }
-
-});
-
-router.route('/list')
     .get(async (req: Request, res: Response) => {
 
-        Broker.find().then((listar) => {
-            console.log(listar);
-            res.render('../views/paginas/principal.hbs', { listar: listar });
-        });
+        const { id } = req.params;
+        const usuario = await Usuario.findById(id);
+
+        res.render('broker/create', { usuario })
+
+
+    })
+    .post(async (req: Request, res: Response) => {
+
+        try {
+
+            const { numeroIp, porta, clear, payload, qos, retain, usuario } = req.body;
+            const newBroker = new Broker({ numeroIp, porta, clear, payload, qos, retain, usuario });
+            await newBroker.save();
+
+            return res.status(200).send('Creating Sucess!');
+
+
+        } catch (error) {
+            return res.status(400).send({ error: 'Error creating new Broker' });
+        }
+
     });
 
-    router.route('/update/:id')
+router.route('/list/:id')
+    .get(async (req: Request, res: Response) => {
+
+        const { id } = req.params;
+        const busca = await Usuario.findById(id);
+
+        if (busca != null) {
+            Broker.find({ usuario: busca.nomeUsuario }).then((listar) => {
+                console.log(listar);
+                res.render('../views/broker/list.hbs', { listar: listar });
+            });
+        }
+    });
+
+router.route('/update/:id')
     .get(async (req: Request, res: Response) => {
 
         const { id } = req.params;
         const broker = await Broker.findById(id);
+
+        if (broker != null) { console.log(broker?.porta) }
 
         res.render('broker/update', { broker })
     })
@@ -56,10 +63,10 @@ router.route('/list')
         const { id } = req.params;
         const { numeroIp, porta } = req.body;
         await Broker.findByIdAndUpdate(id, { numeroIp, porta });
-        res.redirect('../list');
+        res.redirect('../views/topico/list.hbs');
     });
 
-    router.route('/delete/:id')
+router.route('/delete/:id')
     .get(async (req: Request, res: Response) => {
         const { id } = req.params;
         await Broker.findByIdAndDelete(id);
@@ -67,11 +74,11 @@ router.route('/list')
     });
 
 
-    router.route('/conectBroker')
+router.route('/conectBroker')
     .get(async (req: Request, res: Response) => {
 
         res.send(conectBroker);
-        
+
     });
 
 

@@ -1,106 +1,73 @@
 import { Router, Request, Response } from 'express';
 import mqtt, { Client } from 'mqtt';
 import Broker from '../model/Broker';
-import { callbackPromise } from 'nodemailer/lib/shared';
 
 const router = Router();
 
-
-
-router.route('/connect')
+router.route('/connect/:id')
     .get(async (req: Request, res: Response) => {
 
-        const PORT = 1883;
+
+        // res.render('../views/broker/publish.hbs')
+
         const HOST = 'stark';
 
-        const broker = mqtt.connect('mqtt://broker.mqttdashboard.com', {
-            port: PORT,
-            host: HOST,
-            connectTimeout: 30 * 100,
-            clean: true,
-            keepalive: 4,
+        const { id } = req.params;
+        const buscar = await Broker.findById(id);
 
-            will: {
-                topic: 'dead',
-                payload: 'myPayload',
-                qos: 1,
-                retain: true
-            }
+        if (buscar != null) {
 
-        });
+            const broker = mqtt.connect('mqtt://broker.mqttdashboard.com', {
+                port: buscar.porta,
+                host: HOST,
+                connectTimeout: 30 * 100,
+                clean: buscar.clean,
+                keepalive: 4,
 
-        const mensagem = 'Olá';
-        const topico = 'localhost:3000/broker'
-
-        //mqtt.Client#publish(topic, message, [options], [callback])
-
-      //  broker.subscribe(mensagem);
-      //  broker.publish(mensagem, topico);
-        
-        broker.on('connect', function () {
-            try {
-                broker.subscribe('presence', function  (err) {
-                    if(!err){
-                        broker.publish('presence', 'Publicando no Broker');
-                        res.send('Broker Connected');
+                will: {
+                    topic: 'dead',
+                    payload: buscar.payload,
+                    qos: buscar.qos,
+                    retain: buscar.retain,
+                    properties: {
+                        willDelayInterval: 10 * 100
                     }
-                    else{
-                        res.send('Broker not connected')
-                    }
-                })
-               
-            } catch (error) {
-                res.send('Error Connected Broker');
-            }
+                }
 
-        });
+            });
 
-        broker.on('message', function(topico, mensagem ) {
-            console.log(mensagem.toString())
-            broker.end()
-        })
 
+            broker.on('connect', function () {
+                try {
+
+                    // const { mensagem } = req.body;
+                   // const mensagem = 'Olá';
+
+                    broker.subscribe('presence', function (err) {
+                        if (!err) {
+                            broker.publish('presence', 'Testando o Broker');
+                            res.send('Broker connected')
+                        }
+                        else {
+                            res.send('Broker not connected')
+                        }
+                    })
+
+                } catch (error) {
+                    res.send('Error Connected Broker');
+                }
+
+            });
+
+            broker.on('message', function (topico, mensagem) {
+                //res.render('../views/broker/publish.hbs', {mensagem: mensagem})
+                console.log(mensagem.toString())
+                broker.end()
+            })
+
+        }
 
     })
-
-
-
-/*
-const PORT = 1883;
-const HOST = 'stark';
-
-const broker = mqtt.connect('mqtt://broker.mqttdashboard.com', {
-    port: PORT,
-    host: HOST,
-    connectTimeout: 30 * 100,
-    clean: true,
-
-    will: {
-        topic: 'dead',
-        payload: 'myPayload',
-        qos: 1,
-        retain: true
-    }
-
-});
-
-const mensagem = 'Olá';
-
-//mqtt.Client#publish(topic, message, [options], [callback])
-
-broker.subscribe('messages');
-broker.publish('messages', 'Current time is: ' + new Date);
-broker.on('message', function () {
-
-    try {
-        console.log('Broker Connected');
-    } catch (error) {
-        console.log('Error Connected Broker');
-    }
-
-});
-
-*/
 
 
 export default router;
