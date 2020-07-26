@@ -13,6 +13,7 @@ import recuperarSenhaRoutes from './routes/recuperarSenha';
 import brokerRoutes from './routes/broker';
 import connectBrokerRoutes from './routes/conectBroker';
 import topicoRoutes from './routes/topico';
+import publishBrokerRoutes from './routes/publishBroker';
 
 class Application {
 
@@ -56,6 +57,7 @@ class Application {
         this.app.use('/broker', brokerRoutes);
         this.app.use('/conectar', connectBrokerRoutes);
         this.app.use('/topico', topicoRoutes);
+        this.app.use('/publishBroker', publishBrokerRoutes)
         
         this.app.use(express.static(path.join(__dirname, 'public')));
     }

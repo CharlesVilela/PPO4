@@ -20,12 +20,14 @@ router.route('/create/:id')
 
         try {
 
-            const { nome, mensagem, usuario } = req.body;
-            const newTopico = new Topico({ nome, mensagem, usuario });
+            const { nome, usuario } = req.body;
+            
+            const newTopico = new Topico({ nome, usuario });
             await newTopico.save();
 
-            return res.status(200).send('Creating Sucess!');
+            const buscBroker = await Broker.findOneAndUpdate( { usuario: usuario }, {$push: {topico: newTopico } } );
 
+            return res.status(200).send('Creating Sucess!');
 
         } catch (error) {
             return res.status(400).send({ error: 'Error creating new Broker' });
@@ -39,41 +41,49 @@ router.route('/list/:id')
         const { id } = req.params;
         const busca = await Usuario.findById(id);
 
+       // const listar = await Broker.find().populate('Usuario');
+        //res.render('../views/topico/list.hbs', { listar: listar });
+
         if (busca != null) {
             Topico.find({ usuario: busca.nomeUsuario }).then((listar) => {
                 console.log(listar);
                 res.render('../views/topico/list.hbs', { listar: listar });
             });
         }
+
     });
 
 router.route('/update/:id')
     .get(async (req: Request, res: Response) => {
 
         const { id } = req.params;
-        const topico = await Topico.findById(id);
+        const busca = await Topico.findById(id);
 
-        if (topico != null) { console.log(topico.nome) }
+        if (busca != null) { console.log() }
 
-        res.render('topico/update', { topico })
+        res.render('topico/update', { busca })
     })
     .post(async (req: Request, res: Response) => {
 
         const { id } = req.params;
         const { nome, mensagem } = req.body;
-        await Topico.findByIdAndUpdate(id, { nome, mensagem });
+        await Topico.findByIdAndUpdate(id, { $set: {nome, mensagem} });
         res.redirect('../list');
     });
 
 router.route('/delete/:id')
     .get(async (req: Request, res: Response) => {
+        
         const { id } = req.params;
+        const nomeRecebido = req.body;
         await Topico.findByIdAndDelete(id);
+       // await Broker.findByIdAndUpdate(id, {$pull: {topico: {nome: nomeRecebido} } });
         res.redirect('../list');
-    });
+    })
+    
 
 
-router.route('/subscribe/:id')
+/*router.route('/subscribe/:id')
     .get(async (req: Request, res: Response) => {
 
        // const { id } = req.params;
@@ -88,6 +98,6 @@ router.route('/subscribe/:id')
         await Topico.findByIdAndUpdate(id, { broker });
         res.redirect('../list');
     });
-
+*/
 
 export default router;

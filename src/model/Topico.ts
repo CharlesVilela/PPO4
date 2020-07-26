@@ -12,15 +12,12 @@ const topicoSchema = new Schema ({
         type: String,
         required: true
     },
-    mensagem:{
+    mensagem:[{
         type: String
-    },
+    }],
     usuario: {
         type: String,
         required: true
-    },
-    broker: {
-        type: String
     }
 });
 

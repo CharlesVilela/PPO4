@@ -1,6 +1,9 @@
 import { Schema, model, Document } from 'mongoose';
 import mongoose from '../database';
 import Usuario from '../model/Usuario';
+import Topico from '../model/Topico';
+
+
 import { QoS } from 'mqtt';
 
 interface brokerInterface extends Document {
@@ -50,8 +53,12 @@ const brokerSchema = new Schema({
     usuario:{
         type: String,
         required: true 
-    }
-
-})
+    },
+    topico:[{
+        type: Schema.Types.ObjectId,
+        ref: 'Topico'
+    }]
+}
+)
 
 export default model<brokerInterface>('Broker', brokerSchema);

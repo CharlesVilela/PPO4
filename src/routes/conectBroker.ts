@@ -7,22 +7,22 @@ const router = Router();
 router.route('/connect/:id')
     .get(async (req: Request, res: Response) => {
 
-
-        // res.render('../views/broker/publish.hbs')
-
         const HOST = 'stark';
 
         const { id } = req.params;
         const buscar = await Broker.findById(id);
 
+        res.render('../views/broker/publish.hbs', { buscar })
+
         if (buscar != null) {
 
-            const broker = mqtt.connect('mqtt://broker.mqttdashboard.com', {
+            const client = mqtt.connect('mqtt://broker.hivemq.com', {
                 port: buscar.porta,
                 host: HOST,
-                connectTimeout: 30 * 100,
+                connectTimeout: (30 * 100) / 1000,
                 clean: buscar.clean,
                 keepalive: 4,
+            
 
                 will: {
                     topic: 'dead',
@@ -30,42 +30,13 @@ router.route('/connect/:id')
                     qos: buscar.qos,
                     retain: buscar.retain,
                     properties: {
-                        willDelayInterval: 10 * 100
+                        willDelayInterval: (10 * 100) / 1000
                     }
+                    
                 }
 
             });
-
-
-            broker.on('connect', function () {
-                try {
-
-                    // const { mensagem } = req.body;
-                   // const mensagem = 'Olá';
-
-                    broker.subscribe('presence', function (err) {
-                        if (!err) {
-                            broker.publish('presence', 'Testando o Broker');
-                            res.send('Broker connected')
-                        }
-                        else {
-                            res.send('Broker not connected')
-                        }
-                    })
-
-                } catch (error) {
-                    res.send('Error Connected Broker');
-                }
-
-            });
-
-            broker.on('message', function (topico, mensagem) {
-                //res.render('../views/broker/publish.hbs', {mensagem: mensagem})
-                console.log(mensagem.toString())
-                broker.end()
-            })
-
-        }
+        }   
 
     })
 

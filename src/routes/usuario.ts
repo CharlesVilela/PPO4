@@ -28,11 +28,9 @@ router.route('/create')
             erros.push({ texto: 'As senhas não são iguais' });
         }
 
-
         if (erros.length > 0) {
             res.render('usuario/create', { erros: erros });
         } else {
-
             const { nomeUsuario, email, senha } = req.body;
             const newUsuario = new Usuario({ nomeUsuario, email, senha });
             await newUsuario.save();

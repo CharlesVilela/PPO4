@@ -2,14 +2,10 @@
     <div class="col-md-4 offset-md-4">
         <div class="card">
             <div class="card-body">
-                <form action="/broker/update/{{buscar._id}}" method="POST">
+                <form action="/topico/delete/{{_id}}" method="POST">
                     <div class="form-group">
-                        <input type="text" name="numeroIp" value="{{broker.numeroIp}}" placeholder="Numero de IP" class="form-control" autofocus>
+                        <input type="text" name="nomeRecebido" placeholder="Nome do Topico" class="form-control" autofocus>
                     </div>
-                    <div class="form-group">
-                        <input type="text"  class="form-control" name="porta" value="{{broker.porta}}" placeholder="Porta">
-                    </div>
- 
                     <div class="botaoEnviar">
                         <button type="submit" class="btn btn-success btn-block">
                             Save

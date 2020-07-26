@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const URI = 'mongodb+srv://ppo:123@cluster0.a6gu7.mongodb.net/ppo?retryWrites=true&w=majority';
+const URI = 'mongodb+srv://ppo:123@cluster0.d8jul.mongodb.net/ppo?retryWrites=true&w=majority';
 
 async function connect (){
 
@@ -8,7 +8,8 @@ async function connect (){
        await mongoose.connect(URI, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
-            useCreateIndex: true
+            useCreateIndex: true,
+            useFindAndModify: false
         });
         console.log('Database successfully connected!');
     }

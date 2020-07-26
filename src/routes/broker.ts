@@ -14,20 +14,13 @@ router.route('/create/:id')
         const usuario = await Usuario.findById(id);
 
         res.render('broker/create', { usuario })
-
-
     })
     .post(async (req: Request, res: Response) => {
-
         try {
-
             const { numeroIp, porta, clear, payload, qos, retain, usuario } = req.body;
             const newBroker = new Broker({ numeroIp, porta, clear, payload, qos, retain, usuario });
             await newBroker.save();
-
             return res.status(200).send('Creating Sucess!');
-
-
         } catch (error) {
             return res.status(400).send({ error: 'Error creating new Broker' });
         }
@@ -39,7 +32,6 @@ router.route('/list/:id')
 
         const { id } = req.params;
         const busca = await Usuario.findById(id);
-
         if (busca != null) {
             Broker.find({ usuario: busca.nomeUsuario }).then((listar) => {
                 console.log(listar);
@@ -54,9 +46,9 @@ router.route('/update/:id')
         const { id } = req.params;
         const broker = await Broker.findById(id);
 
-        if (broker != null) { console.log(broker?.porta) }
-
-        res.render('broker/update', { broker })
+        if (broker != null) {
+            res.render('broker/update', { broker })
+        }
     })
     .post(async (req: Request, res: Response) => {
 
@@ -71,14 +63,6 @@ router.route('/delete/:id')
         const { id } = req.params;
         await Broker.findByIdAndDelete(id);
         res.redirect('../list');
-    });
-
-
-router.route('/conectBroker')
-    .get(async (req: Request, res: Response) => {
-
-        res.send(conectBroker);
-
     });
 
 
