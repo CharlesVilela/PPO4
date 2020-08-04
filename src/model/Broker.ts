@@ -51,7 +51,8 @@ const brokerSchema = new Schema({
         default: false
     },
     usuario:{
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'Usuario',
         required: true 
     },
     topico:[{

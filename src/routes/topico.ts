@@ -1,112 +1,66 @@
 import { Router, Response, Request } from 'express';
 
 import Topico from '../model/Topico';
-import Usuario from '../model/Usuario';
 import Broker from '../model/Broker';
+import statusCode from '../config/statusCode';
 
 const router = Router();
 
-router.route('/create/:id')
-    .get(async (req: Request, res: Response) => {
-
+router.post('/create/:id', async (req: Request, res: Response) => {
+    try {
         const { id } = req.params;
-        const usuario = await Usuario.findById(id);
+        const { nome } = req.body;
+        const newTopico = new Topico({ nome: nome, usuario: id });
+        await Topico.create(newTopico);
 
-        res.render('topico/create', { usuario })
+        await Broker.findOneAndUpdate({ usuario: id }, { $push: { topico: newTopico } });
 
+        return res.status(statusCode.success).json({ newTopico });
+    } catch (error) {
+        return res.status(statusCode.error).send('Error created Topico');
+    }
+});
 
-    })
-    .post(async (req: Request, res: Response) => {
+router.get('/list', async (req: Request, res: Response) => {
+    try {
+        const topicos = await Topico.find();
+        return res.status(statusCode.success).json({ topicos });
+    } catch (error) {
+        return res.status(statusCode.error).send('Error listen Topico');
+    }
+});
 
-        try {
-
-            const { nome, usuario } = req.body;
-            
-            const newTopico = new Topico({ nome, usuario });
-            await newTopico.save();
-
-            const buscBroker = await Broker.findOneAndUpdate( { usuario: usuario }, {$push: {topico: newTopico } } );
-
-            return res.status(200).send('Creating Sucess!');
-
-        } catch (error) {
-            return res.status(400).send({ error: 'Error creating new Broker' });
-        }
-
-    });
-
-router.route('/list/:id')
-    .get(async (req: Request, res: Response) => {
-
+router.get('/listarId/:id', async (req: Request, res: Response) => {
+    try {
         const { id } = req.params;
-        const busca = await Usuario.findById(id);
+        const topico = await Topico.findById(id);
+        return res.status(statusCode.success).json(topico);
+    } catch (error) {
+        return res.status(statusCode.error).send('Error listen Brokers');
+    }
+});
 
-       // const listar = await Broker.find().populate('Usuario');
-        //res.render('../views/topico/list.hbs', { listar: listar });
-
-        if (busca != null) {
-            Topico.find({ usuario: busca.nomeUsuario }).then((listar) => {
-                console.log(listar);
-                res.render('../views/topico/list.hbs', { listar: listar });
-            });
-        }
-
-    });
-
-router.route('/update/:id')
-    .get(async (req: Request, res: Response) => {
-
+router.put('/update/:id', async (req: Request, res: Response) => {
+    try {
         const { id } = req.params;
-        const busca = await Topico.findById(id);
+        const { nome } = req.body;
+        const topico = await Topico.findByIdAndUpdate(id, { nome: nome });
 
-        if (busca != null) { console.log() }
+        return res.status(statusCode.success).send('Update success!');
+    } catch (error) {
+        return res.status(statusCode.error).send('Error Update Broker');
+    }
+});
 
-        res.render('topico/update', { busca })
-    })
-    .post(async (req: Request, res: Response) => {
-
+router.delete('/delete/:id', async (req: Request, res: Response) => {
+    try {
         const { id } = req.params;
-        const { nome, mensagem } = req.body;
-        await Topico.findByIdAndUpdate(id, { $set: {nome, mensagem} });
-        res.redirect('../list');
-    });
-
-router.route('/delete/:id')
-    .get(async (req: Request, res: Response) => {
-        
-        const { id } = req.params;
-        const nomeRecebido = req.body;
         await Topico.findByIdAndDelete(id);
-
-        const a = await Broker.findOne(Topico);
-        console.log(a);
-
-        await Broker.findOneAndRemove(Topico);
-
-       // await Broker.findByIdAndDelete(id);
-
-
-       // await Broker.findByIdAndUpdate(id, {$pull: {topico: {nome: nomeRecebido} } });
-        res.redirect('../list');
-    })
-    
-
-
-/*router.route('/subscribe/:id')
-    .get(async (req: Request, res: Response) => {
-
-       // const { id } = req.params;
-        const broker = await Broker.find();
-
-        res.render('topico/subscribe', { broker: broker })
-    })
-    .post(async (req: Request, res: Response) => {
-
-        const { id } = req.params;
-        const { broker } = req.body;
-        await Topico.findByIdAndUpdate(id, { broker });
-        res.redirect('../list');
-    });
-*/
+        await Broker.findOneAndUpdate({topico: id}, {$pull: {topico: id} });
+        return res.status(statusCode.success).send('Deleting Topico success!');
+    } catch (error) {
+        return res.status(statusCode.error).send('Error Deleting!');
+    }
+});
 
 export default router;

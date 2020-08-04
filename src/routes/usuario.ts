@@ -35,7 +35,7 @@ router.get('/buscarId/:id', async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
         const usuario = await Usuario.findById(id);
-        return res.status(statusCode.success).json({ usuario });
+        return res.status(statusCode.success).json(usuario);
     } catch (error) {
         return res.status(statusCode.error).send('Error listen!');
     }

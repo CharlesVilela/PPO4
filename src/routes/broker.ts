@@ -4,66 +4,62 @@ import Broker from '../model/Broker';
 import Usuario from '../model/Usuario';
 
 import conectBroker from '../routes/conectBroker';
+import statusCode from '../config/statusCode';
 
 const router = Router();
 
-router.route('/create/:id')
-    .get(async (req: Request, res: Response) => {
-
+router.post('/create/:id', async (req: Request, res: Response) => {
+    try {
         const { id } = req.params;
-        const usuario = await Usuario.findById(id);
+        const { numeroIp, porta, clear, payload, qos, retain } = req.body;
+        const newBroker = new Broker({ numeroIp: numeroIp, porta: porta, clear: clear, payload: payload, qos: qos, retain: retain, usuario: id });
+        await Broker.create(newBroker);
 
-        res.render('broker/create', { usuario })
-    })
-    .post(async (req: Request, res: Response) => {
-        try {
-            const { numeroIp, porta, clear, payload, qos, retain, usuario } = req.body;
-            const newBroker = new Broker({ numeroIp, porta, clear, payload, qos, retain, usuario });
-            await newBroker.save();
-            return res.status(200).send('Creating Sucess!');
-        } catch (error) {
-            return res.status(400).send({ error: 'Error creating new Broker' });
-        }
+        return res.status(statusCode.created).json({ newBroker });
+    } catch (error) {
+        return res.status(statusCode.error).send('Error created Broker');
+    }
+});
 
-    });
+router.get('/list', async (req: Request, res: Response) => {
+    try {
+        const brokers = await Broker.find();
+        return res.status(statusCode.success).json({ brokers });
+    } catch (error) {
+        return res.status(statusCode.error).send('Error listen Brokers');
+    }
+});
 
-router.route('/list/:id')
-    .get(async (req: Request, res: Response) => {
-
-        const { id } = req.params;
-        const busca = await Usuario.findById(id);
-        if (busca != null) {
-            Broker.find({ usuario: busca.nomeUsuario }).then((listar) => {
-                console.log(listar);
-                res.render('../views/broker/list.hbs', { listar: listar });
-            });
-        }
-    });
-
-router.route('/update/:id')
-    .get(async (req: Request, res: Response) => {
-
-        const { id } = req.params;
+router.get('/listarId/:id', async (req: Request, res: Response) => {
+    try {
+        const { id }  = req.params;
         const broker = await Broker.findById(id);
+        return res.status(statusCode.success).json( broker);
+    } catch (error) {
+        return res.status(statusCode.error).send('Error listen Brokers');
+    }
+});
 
-        if (broker != null) {
-            res.render('broker/update', { broker })
-        }
-    })
-    .post(async (req: Request, res: Response) => {
-
+router.put('/update/:id', async (req: Request, res: Response) => {
+    try {
         const { id } = req.params;
-        const { numeroIp, porta } = req.body;
-        await Broker.findByIdAndUpdate(id, { numeroIp, porta });
-        res.redirect('../views/topico/list.hbs');
-    });
+        const {numeroIp, porta, clear, payload, qos, retain} = req.body;
+        const broker = await Broker.findByIdAndUpdate(id, { numeroIp: numeroIp, porta: porta, clear: clear, payload: payload, qos: qos, retain: retain });
 
-router.route('/delete/:id')
-    .get(async (req: Request, res: Response) => {
+        return res.status(statusCode.success).send('Update success');
+    } catch (error) {
+        return res.status(statusCode.error).send('Error Update Broker');
+    }
+});
+
+router.delete('/delete/:id', async (req: Request, res: Response) => {
+    try{
         const { id } = req.params;
         await Broker.findByIdAndDelete(id);
-        res.redirect('../list');
-    });
-
+        return res.status(statusCode.success).send('Deleting Broker success!');
+    }catch(error){
+        return res.status(statusCode.error).send('Error Deleting!');
+    }
+});
 
 export default router;

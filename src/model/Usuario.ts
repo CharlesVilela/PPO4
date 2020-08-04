@@ -18,8 +18,7 @@ interface usuarioInterface extends Document {
         type: String,
         required: [true, 'O E-mail é obrigatório'],
         lowercase: true,
-        unique: true,
-       
+        unique: true, 
     },
     senha: {
         type: String,
@@ -27,7 +26,7 @@ interface usuarioInterface extends Document {
         lowercase: true,
         minlength: [8, 'A senha não pode ter menos que 8 caracteres'],
         maxlength: [16, 'A senha não pode ter mais que 16 caracteres'],
-       
+        select: false
     }
     });
 
