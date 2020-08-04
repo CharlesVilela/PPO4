@@ -4,6 +4,8 @@ import exphbs from 'express-handlebars';
 import handlebars, { unregisterHelper, ParseOptions, create, RuntimeOptions } from 'handlebars';
 import path from 'path';
 import { allowInsecurePrototypeAccess } from '@handlebars/allow-prototype-access';
+import cors from 'cors';
+import bodyParser from 'body-parser';
 
 //Routes
 import indexRoutes from './routes';
@@ -46,6 +48,11 @@ class Application {
         this.app.use(morgan('dev'));
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: false }));
+
+        this.app.use(bodyParser.json());
+        this.app.use(bodyParser.urlencoded({ extended: false }));
+
+        this.app.use(cors());
 
     }
 

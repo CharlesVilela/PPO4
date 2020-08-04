@@ -77,6 +77,15 @@ router.route('/delete/:id')
         const { id } = req.params;
         const nomeRecebido = req.body;
         await Topico.findByIdAndDelete(id);
+
+        const a = await Broker.findOne(Topico);
+        console.log(a);
+
+        await Broker.findOneAndRemove(Topico);
+
+       // await Broker.findByIdAndDelete(id);
+
+
        // await Broker.findByIdAndUpdate(id, {$pull: {topico: {nome: nomeRecebido} } });
         res.redirect('../list');
     })

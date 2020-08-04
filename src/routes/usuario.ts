@@ -1,75 +1,68 @@
-import { Router, Request, Response } from 'express';
+import express, { Response, Request, NextFunction } from 'express';
 
-// IMPORTS DE MODEL
+import statusCode from '../config/statusCode';
+
+//Model
 import Usuario from '../model/Usuario';
 
 
+const router = express.Router();
 
-const router = Router();
+router.post('/create', async (req: Request, res: Response) => {
+    try {
+        const { nomeUsuario, email, senha } = req.body;
+        const newUsuario = new Usuario({ nomeUsuario, email, senha });
 
-router.route('/create')
-    .get((req: Request, res: Response) => {
-        res.render('usuario/create')
-    })
-    .post(async (req: Request, res: Response) => {
+        console.log(newUsuario);
 
-        var erros = []
+        await Usuario.create(newUsuario);
+        return res.status(statusCode.created).send({ newUsuario });
+    } catch (error) {
+        return res.status(statusCode.error).send('error created!');
+    }
+});
 
-        if (!req.body.nomeUsuario || req.body.nomeUsuario == undefined || req.body.nomeUsuario == null) {
-            erros.push({ texto: 'Nome Invalido' });
-        }
-        if (!req.body.email || req.body.email == undefined || req.body.email == null) {
-            erros.push({ texto: 'E-mail Invalido' });
-        }
-        if (req.body.senha.length < 8 || req.body.senha.length > 16 || req.body.senha == null) {
-            erros.push({ texto: 'Senha Invalida ' });
-        }
-        if (req.body.senha != req.body.confirmarSenha) {
-            erros.push({ texto: 'As senhas não são iguais' });
-        }
+router.get('/list', async (req: Request, res: Response) => {
+    try {
+        const usuarios = await Usuario.find();
+        return res.status(statusCode.success).json({ usuarios });
+    } catch (error) {
+        return res.status(statusCode.error).send('Error listen!');
+    }
+});
 
-        if (erros.length > 0) {
-            res.render('usuario/create', { erros: erros });
-        } else {
-            const { nomeUsuario, email, senha } = req.body;
-            const newUsuario = new Usuario({ nomeUsuario, email, senha });
-            await newUsuario.save();
-            res.redirect('../usuario/list');
-        }
-    })
-
-
-router.route('/list')
-    .get(async (req: Request, res: Response) => {
-
-        Usuario.find().then((listar) => {
-            console.log(listar);
-            res.render('usuario/list', { listar: listar });
-        });
-    });
-
-router.route('/update/:id')
-    .get(async (req: Request, res: Response) => {
-
+router.get('/buscarId/:id', async (req: Request, res: Response) => {
+    try {
         const { id } = req.params;
         const usuario = await Usuario.findById(id);
+        return res.status(statusCode.success).json({ usuario });
+    } catch (error) {
+        return res.status(statusCode.error).send('Error listen!');
+    }
+});
 
-        res.render('usuario/update', { usuario })
-    })
-    .post(async (req: Request, res: Response) => {
-
+router.put('/update/:id', async (req: Request, res: Response) => {
+    try {
         const { id } = req.params;
         const { nomeUsuario, email, senha } = req.body;
-        await Usuario.findByIdAndUpdate(id, { nomeUsuario, email, senha });
-        res.redirect('../list');
-    });
 
-router.route('/delete/:id')
-    .get(async (req: Request, res: Response) => {
+        console.log(nomeUsuario, email, senha);
+
+        await Usuario.findByIdAndUpdate(id, { nomeUsuario: nomeUsuario, email: email, senha: senha });
+        return res.status(statusCode.success).send('Update');
+    } catch (error) {
+        return res.status(statusCode.error).send('Error in Update');
+    }
+});
+
+router.delete('/delete/:id', async (req: Request, res: Response) => {
+    try {
         const { id } = req.params;
         await Usuario.findByIdAndDelete(id);
-        res.redirect('../list');
-    });
-
+        return res.status(statusCode.success).send('deleteding');
+    } catch (error) {
+        return res.status(statusCode.error).send('Error in deleting');
+    }
+});
 
 export default router;
