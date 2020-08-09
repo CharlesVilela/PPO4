@@ -2,9 +2,13 @@ import { Router, Response, Request } from 'express';
 
 import Topico from '../model/Topico';
 import Broker from '../model/Broker';
+
 import statusCode from '../config/statusCode';
+import autoMidlewares from '../middlewares/auth';
 
 const router = Router();
+
+router.use(autoMidlewares);
 
 router.post('/create/:id', async (req: Request, res: Response) => {
     try {

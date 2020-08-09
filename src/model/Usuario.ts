@@ -1,5 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
 
+
 interface usuarioInterface extends Document {
    nomeUsuario: string
    email: string
@@ -25,8 +26,8 @@ interface usuarioInterface extends Document {
         required: [true, 'A senha é obrigatória'],
         lowercase: true,
         minlength: [8, 'A senha não pode ter menos que 8 caracteres'],
-        maxlength: [16, 'A senha não pode ter mais que 16 caracteres'],
-        select: false
+        
+        select: true
     }
     });
 

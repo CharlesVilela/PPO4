@@ -1,4 +1,5 @@
 import express, { Response, Request, NextFunction } from 'express';
+import bcrypt from 'bcrypt';
 
 import statusCode from '../config/statusCode';
 
@@ -11,7 +12,13 @@ const router = express.Router();
 router.post('/create', async (req: Request, res: Response) => {
     try {
         const { nomeUsuario, email, senha } = req.body;
-        const newUsuario = new Usuario({ nomeUsuario, email, senha });
+
+        //const salt = await bcrypt.genSalt(10);
+       // const hash = await bcrypt.hashSync(senha, 5);
+       // const senhaCriptografada = hash;
+        
+
+        const newUsuario = new Usuario({ nomeUsuario: nomeUsuario, email: email, senha: senha });
 
         console.log(newUsuario);
 

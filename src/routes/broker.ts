@@ -3,10 +3,12 @@ import { Router, Request, Response } from 'express';
 import Broker from '../model/Broker';
 import Usuario from '../model/Usuario';
 
-import conectBroker from '../routes/conectBroker';
 import statusCode from '../config/statusCode';
+import autoMidlewares from '../middlewares/auth';
 
 const router = Router();
+
+router.use(autoMidlewares);
 
 router.post('/create/:id', async (req: Request, res: Response) => {
     try {
